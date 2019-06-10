@@ -133,8 +133,6 @@ function Player(startingDeck, algorithmName) {
     return true;
   };
 
-
-  /////////not done yet
   this.getEffect = (cardArray) => {
     let effects = {
       toNext: {
@@ -150,8 +148,30 @@ function Player(startingDeck, algorithmName) {
     let selfRequests = this.requests;
 
     cardArray.forEach((card) => {
-      if (selfRequests.skip)
+      if (card.type === 4)
+        effects.toNext.skipRequest += 1 + selfRequests.skip;
+
+      else if (card.type === 2)
+        effects.toNext.pullRequest += 2 + selfRequests.pull;
+
+      else if (card.type === 3)
+        effects.toNext.pullRequest += 3 + selfRequests.pull;
+
+      else if ((card.type === 13) && (card.color===1))
+        effects.toNext.pullRequest += 5 + selfRequests.pull;
+
+      else if ((card.type === 13) && (card.color===3))
+        effects.toPrev.pullRequest += 5 + selfRequests.pull;
+
+      selfRequests.skip = 0;
+      selfRequests.pull = 0;
     });
+
+    return {
+      toNext: effects.toNext,
+      toPrev: effects.toPrev,
+      self: selfRequests
+    };
   };
 
 
