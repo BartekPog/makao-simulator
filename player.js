@@ -2,7 +2,7 @@ const Card = require("./card.js");
 
 function Player(startingDeck, algorithmName) {
   this.deck = startingDeck;
-  this.matchingDeck = [];
+
   this.requests = {
     skip: 0,
     pull: 0,
@@ -29,13 +29,34 @@ function Player(startingDeck, algorithmName) {
     });
   };
 
-  this.setMatchingDeck=(topCard)=>{
-    const newMatchingDeck=[];
-    this.deck.forEach((card)=>{
-      if(this.isMatching(card, topCard))
+  this.replaceJoker = (cardArray) => {
+    return cardArray.map((card) => {
+      if (card.type === 0)
+        return {
+          color: card.cardRequest.color,
+          type: card.cardRequest.type,
+          cardRequest: {
+            color: -1,
+            type: -1
+          }
+        };
+      return card;
+    });
+  };
+
+  this.getMatchingCards = (topCard) => {
+    const newMatchingDeck = [];
+    this.deck.forEach((card) => {
+      if (this.isMatching(card, topCard))
         newMatchingDeck.push(card);
     });
-    this.matchingDeck=newMatchingDeck;
+    return newMatchingDeck;
+
+    // TEST LATER
+    // return this.deck.filter((card)=>{
+    //   return this.isMatching(card, topCard);
+    // }.bind({topCard:topCard}));
+
   };
 
   this.selectCard = require("./algorithms/" + algorithmName + ".js");
@@ -66,15 +87,14 @@ function Player(startingDeck, algorithmName) {
 
   this.isMatch = (chosenCard, topCard) => {
     if (this.requests.skip > 0) {
-      if (
+      if !(
         ((chosenCard.type === 4) && this.isTypeMatch(chosenCard, topCard)) ||
         ((chosenCard.type === 12) && (chosenCard.color === 3)))
-        return true;
       return false;
     }
 
     if (this.requests.pull > 0) {
-      if (
+      if !(
         ((chosenCard.type === 12) && (chosenCard.color === 3)) ||
         (
           (
@@ -93,33 +113,46 @@ function Player(startingDeck, algorithmName) {
             )
           )
         )
-      ) return true;
-      return false;
+      ) return false;
     }
-    if ((this.isColorMatch(chosenCard, topCard)) ||
+    if !((this.isColorMatch(chosenCard, topCard)) ||
       (this.isTypeMatch(chosenCard, topCard)))
-      return true;
     return false;
+
+    return true;
   };
 
-  this.isArraySelfMatch=(cardArray)=>{
-    for (let i=0; i<cardArray.length-1; i++){
-      if(this.isTypeMatch(cardArray[i], cardArray[i+1])===false)
+  this.isArrayMatch = (cardArray, topCard) => {
+    if (cardArray.length <= 0) return false;
+    if (this.isMatch(cardArray[0], topCard) == false) return false;
+
+    for (let i = 0; i < cardArray.length - 1; i++) {
+      if (this.isTypeMatch(cardArray[i], cardArray[i + 1]) === false)
         return false;
     }
     return true;
   };
 
-  this.getEffect=(cardArray)=>{
-    let effects={
 
-    }
-    cardArray.forEach((card)=>{
-      
+  /////////not done yet
+  this.getEffect = (cardArray) => {
+    let effects = {
+      toNext: {
+        pullRequest: 0,
+        skipRequest: 0
+      },
+      toPrev: {
+        pullRequest: 0,
+        skipRequest: 0
+      }
+    };
+
+    let selfRequests = this.requests;
+
+    cardArray.forEach((card) => {
+      if (selfRequests.skip)
     });
   };
-
-
 
 
 };
