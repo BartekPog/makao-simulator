@@ -79,45 +79,55 @@ function Player(startingDeck, algorithmName) {
         return true;
       return false;
     } else {
-      if (chosenCard.type === this.requests.type)
+      if (chosenCard.type === this.requests.type){
+        if(chosenCard.type === 12) && (chosenCard.color===3)
+          return false;
+
+        if(chosenCard.type === 13) && (
+            (chosenCard.color===1) ||
+            (chosenCard.color ===3)
+        )
+          return false;
+
         return true;
+        }
       return false;
     }
   };
 
   this.isMatch = (chosenCard, topCard) => {
     if (this.requests.skip > 0) {
-      if !(
-        ((chosenCard.type === 4) && this.isTypeMatch(chosenCard, topCard)) ||
-        ((chosenCard.type === 12) && (chosenCard.color === 3)))
-      return false;
+      if (!(
+          ((chosenCard.type === 4) && this.isTypeMatch(chosenCard, topCard)) ||
+          ((chosenCard.type === 12) && (chosenCard.color === 3))))
+        return false;
     }
 
     if (this.requests.pull > 0) {
-      if !(
-        ((chosenCard.type === 12) && (chosenCard.color === 3)) ||
-        (
+      if (!(
+          ((chosenCard.type === 12) && (chosenCard.color === 3)) ||
           (
-            (this.isColorMatch(chosenCard, topCard)) ||
-            (this.isTypeMatch(chosenCard, topCard))
-          ) &&
-          (
-            (chosenCard.type === 2) ||
-            (chosenCard.type === 3) ||
             (
-              (chosenCard.type === 13) &&
+              (this.isColorMatch(chosenCard, topCard)) ||
+              (this.isTypeMatch(chosenCard, topCard))
+            ) &&
+            (
+              (chosenCard.type === 2) ||
+              (chosenCard.type === 3) ||
               (
-                (chosenCard.color === 1) ||
-                (chosenCard.color === 3)
+                (chosenCard.type === 13) &&
+                (
+                  (chosenCard.color === 1) ||
+                  (chosenCard.color === 3)
+                )
               )
             )
           )
-        )
-      ) return false;
+        )) return false;
     }
-    if !((this.isColorMatch(chosenCard, topCard)) ||
-      (this.isTypeMatch(chosenCard, topCard)))
-    return false;
+    if (!((this.isColorMatch(chosenCard, topCard)) ||
+        (this.isTypeMatch(chosenCard, topCard))))
+      return false;
 
     return true;
   };
@@ -137,18 +147,31 @@ function Player(startingDeck, algorithmName) {
     let effects = {
       toNext: {
         pullRequest: 0,
-        skipRequest: 0
+        skipRequest: 0,
+        typeRequest: -1,
+        colorRequest: -1
+
       },
       toPrev: {
         pullRequest: 0,
-        skipRequest: 0
       }
     };
 
     let selfRequests = this.requests;
 
     cardArray.forEach((card) => {
-      if (card.type === 4)
+      if (card.type === 1)
+        effects.toNext.colorRequest = card.cardRequest.color;
+
+      else if (
+        (card.type === 11) && (
+          deck.filter((deckCard) => deckCard.type === card.cardRequest.type).length > 0
+        ) && (
+          [5, 6, 7, 8, 9, 10, 12, 13].filter((possibleCardType) => possibleCardType === card.cardRequest.type).length > 0
+      ))
+        effects.toNext.typeRequest = card.cardRequest.type;
+
+      else if (card.type === 4)
         effects.toNext.skipRequest += 1 + selfRequests.skip;
 
       else if (card.type === 2)
@@ -157,10 +180,10 @@ function Player(startingDeck, algorithmName) {
       else if (card.type === 3)
         effects.toNext.pullRequest += 3 + selfRequests.pull;
 
-      else if ((card.type === 13) && (card.color===1))
+      else if ((card.type === 13) && (card.color === 1))
         effects.toNext.pullRequest += 5 + selfRequests.pull;
 
-      else if ((card.type === 13) && (card.color===3))
+      else if ((card.type === 13) && (card.color === 3))
         effects.toPrev.pullRequest += 5 + selfRequests.pull;
 
       selfRequests.skip = 0;
@@ -174,6 +197,8 @@ function Player(startingDeck, algorithmName) {
     };
   };
 
+  //////TODOOO
+  //this.makeMove = (newRequests, )
 
 };
 
