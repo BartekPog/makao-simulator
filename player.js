@@ -10,6 +10,28 @@ function Player(startingDeck, algorithmName) {
     type: -1
   }
 
+  this.selectCardArray = require("./algorithms/" + algorithmName + ".js");
+
+  this.removeFromDeck = (cardArray) => {
+    let removeCount = 0;
+    cardArray.forEach((card) => {
+      for (let i = 0; i < deck.length; i++)
+        if (
+          (this.deck[i].color === card.color) &&
+          (this.deck[i].type === card.type)
+        ) {
+          cardArray.splice(i, 1);
+          removeCount++;
+          break;
+        }
+    });
+    return removeCount;
+  };
+
+  this.addToDeck = (cardArray) => {
+    this.deck.push(...cardArray);
+  };
+
   this.setRequests = (newRequests) => {
     const requestUpdated = {
       skip: newRequests.skip,
@@ -29,6 +51,23 @@ function Player(startingDeck, algorithmName) {
     });
   };
 
+  this.getMatchingCards = (topCard) => {
+    const newMatchingDeck = [];
+    this.deck.forEach((card) => {
+      if (
+        (this.isMatching(card, topCard)) ||
+        (card.type === 0)
+      ) newMatchingDeck.push(card);
+    });
+    return newMatchingDeck;
+
+    // TEST LATER
+    // return this.deck.filter((card)=>{
+    //   return this.isMatching(card, topCard);
+    // }.bind({topCard:topCard}));
+
+  };
+
   this.replaceJoker = (cardArray) => {
     return cardArray.map((card) => {
       if (card.type === 0)
@@ -43,23 +82,6 @@ function Player(startingDeck, algorithmName) {
       return card;
     });
   };
-
-  this.getMatchingCards = (topCard) => {
-    const newMatchingDeck = [];
-    this.deck.forEach((card) => {
-      if (this.isMatching(card, topCard))
-        newMatchingDeck.push(card);
-    });
-    return newMatchingDeck;
-
-    // TEST LATER
-    // return this.deck.filter((card)=>{
-    //   return this.isMatching(card, topCard);
-    // }.bind({topCard:topCard}));
-
-  };
-
-  this.selectCard = require("./algorithms/" + algorithmName + ".js");
 
   this.isColorMatch = (chosenCard, topCard) => {
     if (this.requests.color === -1) {
@@ -79,18 +101,18 @@ function Player(startingDeck, algorithmName) {
         return true;
       return false;
     } else {
-      if (chosenCard.type === this.requests.type){
-        if(chosenCard.type === 12) && (chosenCard.color===3)
-          return false;
+      if (chosenCard.type === this.requests.type) {
+        if (chosenCard.type === 12) && (chosenCard.color === 3)
+        return false;
 
-        if(chosenCard.type === 13) && (
-            (chosenCard.color===1) ||
-            (chosenCard.color ===3)
+        if (chosenCard.type === 13) && (
+          (chosenCard.color === 1) ||
+          (chosenCard.color === 3)
         )
-          return false;
+        return false;
 
         return true;
-        }
+      }
       return false;
     }
   };
@@ -133,7 +155,7 @@ function Player(startingDeck, algorithmName) {
   };
 
   this.isArrayMatch = (cardArray, topCard) => {
-    if (cardArray.length <= 0) return false;
+    if (cardArray.length <= 0) return true;
     if (this.isMatch(cardArray[0], topCard) == false) return false;
 
     for (let i = 0; i < cardArray.length - 1; i++) {
@@ -168,7 +190,7 @@ function Player(startingDeck, algorithmName) {
           deck.filter((deckCard) => deckCard.type === card.cardRequest.type).length > 0
         ) && (
           [5, 6, 7, 8, 9, 10, 12, 13].filter((possibleCardType) => possibleCardType === card.cardRequest.type).length > 0
-      ))
+        ))
         effects.toNext.typeRequest = card.cardRequest.type;
 
       else if (card.type === 4)
@@ -198,7 +220,22 @@ function Player(startingDeck, algorithmName) {
   };
 
   //////TODOOO
-  //this.makeMove = (newRequests, )
+  this.makeMove = (topCard, players, cardStack) => {
+
+    //this.addRequests(newRequests);
+
+    let matchingCards = this.getMatchingCards(topCard);
+
+    let chosenArray = [];
+
+    if (matchingCards.length > 0) {
+      chosenArray = this.selectCardArray(deck, matchingCards, topCard, players);
+      if (this.isArrayMatch(chosenArray, topCard) === false)
+        chosenArray = [];
+    }
+    return chosenArray;
+
+  };
 
 };
 
