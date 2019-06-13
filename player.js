@@ -15,12 +15,12 @@ function Player(startingDeck, algorithmName) {
   this.removeFromDeck = (cardArray) => {
     let removeCount = 0;
     cardArray.forEach((card) => {
-      for (let i = 0; i < deck.length; i++)
+      for (let i = 0; i < this.deck.length; i++)
         if (
           (this.deck[i].color === card.color) &&
           (this.deck[i].type === card.type)
         ) {
-          cardArray.splice(i, 1);
+          this.deck.splice(i, 1);
           removeCount++;
           break;
         }
@@ -157,6 +157,22 @@ function Player(startingDeck, algorithmName) {
   this.isArrayMatch = (cardArray, topCard) => {
     if (cardArray.length <= 0) return true;
     if (this.isMatch(cardArray[0], topCard) == false) return false;
+
+    let removeCount = 0;
+    let testDeck= this.deck;
+    cardArray.forEach((card) => {
+      for (let i = 0; i < testDeck.length; i++)
+        if (
+          (testDeck[i].color === card.color) &&
+          (testDeck[i].type === card.type)
+        ) {
+          cardArray.splice(i, 1);
+          removeCount++;
+          break;
+        }
+    });
+    if(removeCount!==cardArray.length)
+      return false;
 
     for (let i = 0; i < cardArray.length - 1; i++) {
       if (this.isTypeMatch(cardArray[i], cardArray[i + 1]) === false)
