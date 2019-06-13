@@ -1,7 +1,7 @@
 const Card = require("./card.js");
 const Player = require("./player.js");
-const initPromise = require("./init.js");
+const inputInitPromise = require("./input-init.js");
 
-initPromise.then(algorithmNames => {
-  console.log(algorithmNames);
+inputInitPromise.then(algorithmNames => {
+
 });

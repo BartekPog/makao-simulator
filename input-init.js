@@ -29,6 +29,10 @@ module.exports = new Promise((resolve, reject) => {
         return (this.indexOf(algorithmName) >= 0);
       }, availableAlgorithmNames);
 
+      console.log('\nPlayers (algorithms) array: ');
+      console.log(okNames);
+      console.log();
+
       resolve(okNames);
     });
   });
