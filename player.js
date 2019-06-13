@@ -3,12 +3,14 @@ const Card = require("./card.js");
 function Player(startingDeck, algorithmName) {
   this.deck = startingDeck;
 
+  this.algorithmName = algorithmName;
+
   this.requests = {
     skip: 0,
     pull: 0,
     color: -1,
     type: -1
-  }
+  };
 
   this.selectCardArray = require("./algorithms/" + algorithmName + ".js");
 
@@ -75,8 +77,8 @@ function Player(startingDeck, algorithmName) {
           color: card.cardRequest.color,
           type: card.cardRequest.type,
           cardRequest: {
-            color: -1,
-            type: -1
+            color: card.cardRequest.request.color,
+            type: card.cardRequest.request.type
           }
         };
       return card;
@@ -102,14 +104,15 @@ function Player(startingDeck, algorithmName) {
       return false;
     } else {
       if (chosenCard.type === this.requests.type) {
-        if (chosenCard.type === 12) && (chosenCard.color === 3)
-        return false;
+        if ((chosenCard.type === 12) && (chosenCard.color === 3))
+          return false;
 
-        if (chosenCard.type === 13) && (
-          (chosenCard.color === 1) ||
-          (chosenCard.color === 3)
-        )
-        return false;
+        if (
+          (chosenCard.type === 13) && (
+            (chosenCard.color === 1) ||
+            (chosenCard.color === 3)
+          ))
+          return false;
 
         return true;
       }
@@ -159,7 +162,7 @@ function Player(startingDeck, algorithmName) {
     if (this.isMatch(cardArray[0], topCard) == false) return false;
 
     let removeCount = 0;
-    let testDeck= this.deck;
+    let testDeck = this.deck;
     cardArray.forEach((card) => {
       for (let i = 0; i < testDeck.length; i++)
         if (
@@ -171,7 +174,7 @@ function Player(startingDeck, algorithmName) {
           break;
         }
     });
-    if(removeCount!==cardArray.length)
+    if (removeCount !== cardArray.length)
       return false;
 
     for (let i = 0; i < cardArray.length - 1; i++) {
@@ -253,6 +256,6 @@ function Player(startingDeck, algorithmName) {
 
   };
 
-};
+}
 
 module.exports = Player;
