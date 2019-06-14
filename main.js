@@ -3,5 +3,5 @@ const Player = require("./player.js");
 const inputInitPromise = require("./input-init.js");
 
 inputInitPromise.then(algorithmNames => {
-
+  
 });
