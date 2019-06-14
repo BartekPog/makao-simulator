@@ -238,7 +238,6 @@ function Player(startingDeck, algorithmName) {
     };
   };
 
-  //////TODOOO
   this.makeMove = (topCard, players, cardStack) => {
 
     //this.addRequests(newRequests);
@@ -257,5 +256,4 @@ function Player(startingDeck, algorithmName) {
   };
 
 }
-
 module.exports = Player;
