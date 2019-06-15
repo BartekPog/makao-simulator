@@ -14,15 +14,16 @@ function Deck() {
         }));
       }
 
-    deck.push(new Card(0, 0, {
-      color: -1,
-      type: -1
-    }));
-
-    deck.push(new Card(0, 0, {
-      color: -1,
-      type: -1
-    }));
+      ///JOKERS
+    // deck.push(new Card(0, 0, {
+    //   color: -1,
+    //   type: -1
+    // }));
+    //
+    // deck.push(new Card(0, 0, {
+    //   color: -1,
+    //   type: -1
+    // }));
 
     this.deck = deck;
   };
@@ -42,8 +43,7 @@ function Deck() {
   this.take = (howMany) => {
     const arr = [];
     const deck = this.deck;
-    for (let i = 0;
-      ((i < howMany) && (deck.length > 0)); i++)
+    for (let i = 0; ((i < howMany) && (deck.length > 0)); i++)
       arr.push(deck.pop());
     this.deck = deck;
     return arr;
@@ -62,7 +62,7 @@ function Deck() {
     let card = this.take(1)[0];
 
     while (
-      ([0,1,2,3,4,11].indexOf(card.type>=0)) || (
+      ([0,1,2,3,4,11].indexOf(card.type)>=0) || (
         ((card.type===12) && (card.color===3)) || (
           (card.type===13) && (
           (card.color===1) || (card.color===3)

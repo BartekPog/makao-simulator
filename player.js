@@ -12,6 +12,8 @@ function Player(startingDeck, algorithmName) {
     type: -1
   };
 
+  this.lastCards = [];
+
   this.selectCardArray = require("./algorithms/" + algorithmName + ".js");
 
   this.isWinner = () => {
@@ -28,6 +30,7 @@ function Player(startingDeck, algorithmName) {
         ) {
           this.deck.splice(i, 1);
           removeCount++;
+          //console.log(card);
           break;
         }
     });
@@ -35,8 +38,8 @@ function Player(startingDeck, algorithmName) {
   };
 
   this.addToDeck = (cardArray) => {
-    this.deck.push(...cardArray);
-    this.requests.pull -= cardArray.length;
+    this.reducePull(cardArray.length);
+    this.deck = this.deck.concat(cardArray);
   };
 
   this.setRequests = (newRequests) => {
@@ -44,7 +47,7 @@ function Player(startingDeck, algorithmName) {
       skip: newRequests.skip,
       pull: newRequests.pull,
       color: newRequests.color,
-      type: neqRequests.type
+      type: newRequests.type
     };
     this.requests = requestUpdated;
   };
@@ -54,14 +57,14 @@ function Player(startingDeck, algorithmName) {
       skip: this.requests.skip + (newRequests.skip || 0),
       pull: this.requests.pull + (newRequests.pull || 0),
       color: newRequests.color || this.requests.color,
-      type: neqRequests.type || this.requests.type
+      type: newRequests.type || this.requests.type
     });
   };
 
   this.reduceSkip = (howMany) => {
-    let skip= this.requests.skip;
+    let skip = this.requests.skip;
     skip -= howMany;
-    this.requests.skip= Math.max(skip, 0);
+    this.requests.skip = Math.max(skip, 0);
   };
 
   this.reducePull = (howMany) => {
@@ -74,23 +77,6 @@ function Player(startingDeck, algorithmName) {
     if (this.requests.skip * this.requests.pull > 0)
       return true;
     return false;
-  };
-
-  this.getMatchingCards = (topCard) => {
-    const newMatchingDeck = [];
-    this.deck.forEach((card) => {
-      if (
-        (this.isMatching(card, topCard)) ||
-        (card.type === 0)
-      ) newMatchingDeck.push(card);
-    });
-    return newMatchingDeck;
-
-    // TEST LATER
-    // return this.deck.filter((card)=>{
-    //   return this.isMatching(card, topCard);
-    // }.bind({topCard:topCard}));
-
   };
 
   this.replaceJoker = (cardArray) => {
@@ -173,16 +159,28 @@ function Player(startingDeck, algorithmName) {
           )
         )) return false;
     }
-    if (!((this.isColorMatch(chosenCard, topCard)) ||
-        (this.isTypeMatch(chosenCard, topCard))))
+    if (this.isColorMatch(chosenCard, topCard) === false) {
+      //console.log("color mismatch");
       return false;
+    }
+
+    if (this.isTypeMatch(chosenCard, topCard) === false) {
+      //console.log("type mismatch");
+      return false;
+    }
+
 
     return true;
   };
 
   this.isArrayMatch = (cardArray, topCard) => {
     if (cardArray.length <= 0) return true;
-    if (this.isMatch(cardArray[0], topCard) == false) return false;
+    if (this.isMatch(this.replaceJoker([cardArray[0]])[0], topCard) == false) {
+      console.log("firstCard error");
+      return false;
+    }
+
+
 
     let removeCount = 0;
     let testDeck = this.deck;
@@ -192,17 +190,23 @@ function Player(startingDeck, algorithmName) {
           (testDeck[i].color === card.color) &&
           (testDeck[i].type === card.type)
         ) {
-          cardArray.splice(i, 1);
+          testDeck.splice(i, 1);
           removeCount++;
           break;
         }
     });
-    if (removeCount !== cardArray.length)
+    if (removeCount !== cardArray.length) {
+      console.log("cards self-repeating error");
       return false;
+    }
+
 
     for (let i = 0; i < cardArray.length - 1; i++) {
-      if (this.isTypeMatch(cardArray[i], cardArray[i + 1]) === false)
+      if (this.isTypeMatch(cardArray[i], cardArray[i + 1]) === false) {
+        console.log("type doesn't match");
         return false;
+      }
+
     }
     return true;
   };
@@ -211,52 +215,52 @@ function Player(startingDeck, algorithmName) {
     let selfRequests = this.requests;
     let effects = {
       toNext: {
-        pullRequest: 0,
-        skipRequest: 0,
-        typeRequest: -1,
-        colorRequest: -1
+        pull: 0,
+        skip: 0,
+        type: -1,
+        color: -1
 
       },
       toPrev: {
-        pullRequest: 0,
+        pull: 0,
       }
     };
 
     if (cardArray.length === 0) {
       effects.toNext = {
-        pullRequest: 0,
-        skipRequest: 0,
-        typeRequest: selfRequests.type,
-        colorRequest: selfRequests.color
+        pull: 0,
+        skip: 0,
+        type: selfRequests.type,
+        color: selfRequests.color
       };
     }
 
     cardArray.forEach((card) => {
       if (card.type === 1)
-        effects.toNext.colorRequest = card.cardRequest.color;
+        effects.toNext.color = card.cardRequest.color;
 
       else if (
         (card.type === 11) && (
-          deck.filter((deckCard) => deckCard.type === card.cardRequest.type).length > 0
+          this.deck.filter((deckCard) => deckCard.type === card.cardRequest.type).length > 0
         ) && (
           [5, 6, 7, 8, 9, 10, 12, 13].filter((possibleCardType) => possibleCardType === card.cardRequest.type).length > 0
         ))
-        effects.toNext.typeRequest = card.cardRequest.type;
+        effects.toNext.type = card.cardRequest.type;
 
       else if (card.type === 4)
-        effects.toNext.skipRequest += 1 + selfRequests.skip;
+        effects.toNext.skip += 1 + selfRequests.skip;
 
       else if (card.type === 2)
-        effects.toNext.pullRequest += 2 + selfRequests.pull;
+        effects.toNext.pull += 2 + selfRequests.pull;
 
       else if (card.type === 3)
-        effects.toNext.pullRequest += 3 + selfRequests.pull;
+        effects.toNext.pull += 3 + selfRequests.pull;
 
       else if ((card.type === 13) && (card.color === 1))
-        effects.toNext.pullRequest += 5 + selfRequests.pull;
+        effects.toNext.pull += 5 + selfRequests.pull;
 
       else if ((card.type === 13) && (card.color === 3))
-        effects.toPrev.pullRequest += 5 + selfRequests.pull;
+        effects.toPrev.pull += 5 + selfRequests.pull;
 
       selfRequests.skip = 0;
       selfRequests.pull = 0;
@@ -269,11 +273,29 @@ function Player(startingDeck, algorithmName) {
     return effects;
   };
 
+  this.getMatchingCards = (topCard) => {
+    const newMatchingDeck = [];
+    this.deck.forEach((card) => {
+      if (
+        (this.isMatch(card, topCard)) ||
+        (card.type === 0)
+      ) newMatchingDeck.push(card);
+    });
+    return newMatchingDeck;
+
+    // TEST LATER
+    // return this.deck.filter((card)=>{
+    //   return this.isMatching(card, topCard);
+    // }.bind({topCard:topCard}));
+
+  };
+
   this.makeMove = (props) => {
 
-    let matchingCards = this.getMatchingCards(topCard);
+    let matchingCards = this.getMatchingCards(props.topCard);
 
     let chosenArray = [];
+    let noJokers = [];
 
     if (matchingCards.length > 0) {
       chosenArray = this.selectCardArray({
@@ -285,14 +307,20 @@ function Player(startingDeck, algorithmName) {
         playersNumber: props.playersNumber,
         matchingCards: matchingCards
       });
+
+      noJokers = this.replaceJoker(chosenArray);
+
+
       if (this.isArrayMatch(chosenArray, props.topCard) === false) {
         chosenArray = [];
-        console.log(algorithmName + "Wrong card array");
+        noJokers = [];
+        console.log(algorithmName + " Wrong card array");
       }
     }
 
-    const noJokers = this.replaceJoker(chosenArray);
     this.removeFromDeck(chosenArray);
+
+    this.lastCards = chosenArray;
 
     return {
       playerID: props.selfID,

@@ -1,4 +1,6 @@
 module.exports = new Promise((resolve, reject) => {
+  //resolve(['random', 'random','random']);
+
 
   const algorithmFolder = './algorithms/';
   const fs = require('fs');
