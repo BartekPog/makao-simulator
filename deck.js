@@ -39,11 +39,17 @@ function Deck() {
     this.deck = deck;
   };
 
-  this.takeCard = () => {
-    return this.deck.pop();
+  this.take = (howMany) => {
+    const arr = [];
+    const deck = this.deck;
+    for (let i = 0;
+      ((i < howMany) && (deck.length > 0)); i++)
+      arr.push(deck.pop());
+    this.deck = deck;
+    return arr;
   };
 
-  this.shuffleInArray = (cardArray) => {
+  this.shuffleIn = (cardArray) => {
     let deck = this.deck;
 
     cardArray.forEach(card =>
@@ -52,6 +58,26 @@ function Deck() {
     this.deck = deck;
   };
 
+  this.firstCard = () => {
+    let card = this.take(1)[0];
+
+    while (
+      ([0,1,2,3,4,11].indexOf(card.type>=0)) || (
+        ((card.type===12) && (card.color===3)) || (
+          (card.type===13) && (
+          (card.color===1) || (card.color===3)
+          )
+        )
+      )
+    ){
+      this.shuffleIn([card]);
+      card = this.take(1)[0];
+    }
+    return card;
+  };
+
+  ///////////////////////////////////
+  this.init();
 }
 
 
