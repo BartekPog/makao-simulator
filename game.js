@@ -20,44 +20,48 @@ module.exports = (algorithmNames) => {
   let topCard = deck.firstCard();
   let playersMoves = [];
 
-  for (let i = 0 + algorithmNames.length; i < 100000 + algorithmNames.length; i++) {
-    //console.log(i-algorithmNames.length);
+  for (let i = 0 + algorithmNames.length; i < 1000 + algorithmNames.length; i++) {
+    console.log(i-algorithmNames.length);
 
     currentPlayerID = i % players.length;
-    nextPlayerID = (i+1) % players.length;
-    prevPlayerID = (i-1) % players.length;
+    nextPlayerID = (i + 1) % players.length;
+    prevPlayerID = (i - 1) % players.length;
     //skipped=false;
 
     deck.shuffleIn(players[currentPlayerID].lastCards);
+
+    // console.log(players[currentPlayerID].deck.length);
 
 
     let playerMove = players[currentPlayerID].makeMove({
       selfID: currentPlayerID,
       topCard: topCard,
-      playersMoves: playersMoves,
+      playersMoves: [...playersMoves],
       playersNumber: algorithmNames.length
     });
 
     playersMoves.push(playerMove);
 
 
-    if(playerMove.moveCards.length===0){
-      if(playerMove.ownRequests.skip>0){
+    if (playerMove.moveCards.length === 0) {
+      if (playerMove.ownRequests.skip > 0) {
         players[currentPlayerID].reduceSkip(1);
-        //skipped=true;
+
         playerMove.effects.toNext.pull += playerMove.ownRequests.pull;
         players[currentPlayerID].reducePull(playerMove.ownRequests.pull);
-      }else {
+      } else {
         players[currentPlayerID].addToDeck(deck.take(1));
 
         playerMove = players[currentPlayerID].makeMove({
           selfID: currentPlayerID,
           topCard: topCard,
-          playersMoves: playersMoves,
+          playersMoves: [...playersMoves],
           playersNumber: algorithmNames.length
         });
         playersMoves.push(playerMove);
       }
+    } else {
+      topCard = playerMove.moveCards[playerMove.moveCards.length - 1];
     }
 
     players[currentPlayerID].addToDeck(deck.take(players[currentPlayerID].requests.pull));
@@ -65,11 +69,11 @@ module.exports = (algorithmNames) => {
     players[nextPlayerID].addRequests(playerMove.effects.toNext);
     players[prevPlayerID].addRequests(playerMove.effects.toPrev);
 
+
     if (players[currentPlayerID].isWinner())
       return currentPlayer;
   }
   players.forEach(player => console.log(player.deck));
 
   return -1;
-
 };

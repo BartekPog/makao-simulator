@@ -1,14 +1,14 @@
 const game = require("./game.js");
 const inputInitPromise = require("./input-init.js");
 
-const gamesNumber = 100;
+const gamesNumber = 10;
 
 inputInitPromise.then(algorithmNames => {
   let wins = algorithmNames.map(() => 0);
   // console.log(wins);
 
   for (let i = 0; i < gamesNumber; i++) {
-    winner = game(algorithmNames);
+    winner = game([...algorithmNames]);
     if (winner >= 0) {
       wins[winner]++;
       console.log(i+" of "+gamesNumber+": "+algorithmNames[winner]);

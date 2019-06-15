@@ -29,7 +29,7 @@ function Deck() {
   };
 
   this.shuffle = () => {
-    let deck = this.deck;
+    let deck = [...this.deck];
     for (let i = 0; i < deck.length; i++) {
       const index = Math.floor(Math.random() * deck.length);
 
@@ -42,7 +42,7 @@ function Deck() {
 
   this.take = (howMany) => {
     const arr = [];
-    const deck = this.deck;
+    const deck = [...this.deck];
     for (let i = 0; ((i < howMany) && (deck.length > 0)); i++)
       arr.push(deck.pop());
     this.deck = deck;
@@ -50,7 +50,7 @@ function Deck() {
   };
 
   this.shuffleIn = (cardArray) => {
-    let deck = this.deck;
+    let deck = [...this.deck];
 
     cardArray.forEach(card =>
       deck.splice(Math.floor(Math.random() * deck.length), 0, card));
