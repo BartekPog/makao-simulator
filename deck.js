@@ -14,16 +14,16 @@ function Deck() {
         }));
       }
 
-    ///JOKERS
-    // deck.push(new Card(0, 0, {
-    //   color: -1,
-    //   type: -1
-    // }));
-    //
-    // deck.push(new Card(0, 0, {
-    //   color: -1,
-    //   type: -1
-    // }));
+    /////JOKERS
+    deck.push(new Card(0, 0, {
+      color: -1,
+      type: -1
+    }));
+
+    deck.push(new Card(0, 0, {
+      color: -1,
+      type: -1
+    }));
 
     this.deck = deck;
   };
@@ -86,6 +86,5 @@ function Deck() {
   ///////////////////////////////////
   this.init();
 }
-
 
 module.exports = Deck;

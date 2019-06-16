@@ -56,7 +56,7 @@ function Player(startingDeck, algorithmName) {
     return removeCount;
   };
 
-  this.addToDeck = (cardArray) => {
+  this.addToDeck = (cardArray, howMany) => {
     this.reducePull(cardArray.length);
     this.deck = this.deck.concat(cardArray);
   };
@@ -83,7 +83,6 @@ function Player(startingDeck, algorithmName) {
 
   this.reducePull = (howMany) => this.requests.pull = Math.max(this.requests.pull-howMany, 0);
 
-  ///check if necessary
   this.isActiveRequest = () => {
     if (this.requests.skip * this.requests.pull > 0)
       return true;
@@ -93,14 +92,14 @@ function Player(startingDeck, algorithmName) {
   this.replaceJoker = (cardArray) => {
     return cardArray.map((card) => {
       if (card.type === 0){
-        if((card.cardRequest.type === 0) || (card.cardRequest.color!== 0))
+        if((card.cardRequest.type === 0) || (card.cardRequest.color=== 0))
           console.log("Wrong joker assign");
         return {
           color: card.cardRequest.color,
           type: card.cardRequest.type,
           cardRequest: {
-            color: card.cardRequest.request.color,
-            type: card.cardRequest.request.type
+            color: card.cardRequest.cardRequest.color,
+            type: card.cardRequest.cardRequest.type
           }
         };
       }
@@ -198,10 +197,10 @@ function Player(startingDeck, algorithmName) {
     return true;
   };
 
-  this.isArrayMatch = (cardArray, topCard) => {
+  this.isArrayMatch = (cardArray, topCard, noJokers) => {
     if (cardArray.length < 1) return true;
     //if (this.isMatch(cardArray[0], topCard) == false) {
-    if (this.isMatch(this.replaceJoker([cardArray[0]])[0], topCard) == false) {
+    if (this.isMatch(noJokers[0], topCard) == false) {
       console.log("firstCard error");
       return false;
     }
@@ -209,8 +208,8 @@ function Player(startingDeck, algorithmName) {
     if(this.isInDeck(cardArray)===false)
       return false;
 
-    for (let i = 0; i < cardArray.length - 1; i++) {
-      if (this.isTypeMatch(cardArray[i], cardArray[i + 1]) === false) {
+    for (let i = 0; i < noJokers.length - 1; i++) {
+      if (this.isTypeMatch(noJokers[i], noJokers[i + 1]) === false) {
         console.log("type doesn't match");
         return false;
       }
@@ -319,7 +318,7 @@ function Player(startingDeck, algorithmName) {
 
       noJokers = this.replaceJoker(chosenArray);
 
-      if (this.isArrayMatch(chosenArray, props.topCard) == false) {
+      if (this.isArrayMatch(chosenArray, props.topCard, noJokers) == false) {
         chosenArray = [];
         noJokers = [];
         console.log(algorithmName + " Wrong card array");

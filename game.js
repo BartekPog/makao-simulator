@@ -19,8 +19,6 @@ module.exports = (algorithmNames) => {
   let playersMoves = [];
 
   for (let i = 0 + algorithmNames.length; i < 1000 + algorithmNames.length; i++) {
-    // console.log(i-algorithmNames.length);
-
     currentPlayerID = i % players.length;
     nextPlayerID = (i + 1) % players.length;
     prevPlayerID = (i - 1) % players.length;
@@ -48,7 +46,7 @@ module.exports = (algorithmNames) => {
         playerMove.effects.toNext.pull += playerMove.ownRequests.pull;
         players[currentPlayerID].reducePull(playerMove.ownRequests.pull);
       } else {
-        players[currentPlayerID].addToDeck(deck.take(1));
+        players[currentPlayerID].addToDeck(deck.take(1),1);
 
         playerMove = players[currentPlayerID].makeMove({
           selfID: currentPlayerID,
@@ -62,14 +60,17 @@ module.exports = (algorithmNames) => {
       topCard = playerMove.moveCards[playerMove.moveCards.length - 1];
     }
 
-    players[currentPlayerID].addToDeck(deck.take(players[currentPlayerID].requests.pull));
+    players[currentPlayerID].addToDeck(deck.take(players[currentPlayerID].requests.pull),players[currentPlayerID].requests.pull);
 
     players[nextPlayerID].addRequests(playerMove.effects.toNext);
     players[prevPlayerID].addRequests(playerMove.effects.toPrev);
 
 
-    if (players[currentPlayerID].isWinner())
+    if (players[currentPlayerID].isWinner()){
+      // console.log(i-algorithmNames.length);
       return currentPlayerID;
+    }
+
   }
   players.forEach(player => console.log(player.deck));
 
