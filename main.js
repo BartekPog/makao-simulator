@@ -7,7 +7,7 @@ inputInitPromise.then(algorithmNames => {
   let wins = algorithmNames.map(() => 0);
   // console.log(wins);
 
-  for (let i = 0; i < gamesNumber; i++) {
+  for (let i = 1; i <= gamesNumber; i++) {
     winner = game([...algorithmNames]);
     if (winner >= 0) {
       wins[winner]++;
@@ -17,6 +17,7 @@ inputInitPromise.then(algorithmNames => {
 
   }
 
+  console.log();
   for (let i = 0; i < algorithmNames.length; i++)
     console.log(algorithmNames[i] + ": " + wins[i] + " wins");
 });
