@@ -144,46 +144,37 @@ function Player(startingDeck, algorithmName) {
   };
 
   this.isMatch = (chosenCard, topCard) => {
-    if (this.requests.skip > 0) {
-      if (!(
-          ((chosenCard.type === 4) && this.isTypeMatch(chosenCard, topCard)) ||
-          ((chosenCard.type === 12) && (chosenCard.color === 3))))
-        return false;
-    }
+    if (this.isActiveRequest()){
+      if((chosenCard.type === 12) && (chosenCard.color === 3))
+        return true;
 
-    if (this.requests.pull > 0) {
-      if (!(
-          ((chosenCard.type === 12) && (chosenCard.color === 3)) ||
-          (
+      if(this.requests.skip>0)
+        if (!((chosenCard.type === 4) && this.isTypeMatch(chosenCard, topCard)))
+          return false;
+
+      if(this.requests.pull>0)
+        if (!(
+            (chosenCard.type === 2) ||
+            (chosenCard.type === 3) ||
             (
-              (this.isColorMatch(chosenCard, topCard)) ||
-              (this.isTypeMatch(chosenCard, topCard))
-            ) &&
-            (
-              (chosenCard.type === 2) ||
-              (chosenCard.type === 3) ||
+              (chosenCard.type === 13) &&
               (
-                (chosenCard.type === 13) &&
-                (
-                  (chosenCard.color === 1) ||
-                  (chosenCard.color === 3)
-                )
+                (chosenCard.color === 1) ||
+                (chosenCard.color === 3)
               )
             )
           )
-        )) return false;
-    }
-    if (this.isColorMatch(chosenCard, topCard) === false) {
-      //console.log("color mismatch");
-      return false;
+        ) return false;
     }
 
-    if (this.isTypeMatch(chosenCard, topCard) === false) {
-      //console.log("type mismatch");
-      return false;
-    }
+    if (this.isColorMatch(chosenCard, topCard))
+      return true;
 
-    return true;
+    if (this.isTypeMatch(chosenCard, topCard))
+      return true;
+
+    return false;
+
   };
 
   this.isInDeck = (cardArray) =>{
@@ -301,10 +292,10 @@ function Player(startingDeck, algorithmName) {
     return newMatchingDeck;
 
     // TEST LATER
+    // isMatch=this.isMatch;
     // return this.deck.filter((card)=>{
-    //   return this.isMatching(card, topCard);
-    // }.bind({topCard:topCard}));
-
+    //   return isMatch(card, topCard);
+    // });
   };
 
   this.makeMove = (props) => {
@@ -314,13 +305,14 @@ function Player(startingDeck, algorithmName) {
     let chosenArray = [];
     let noJokers = [];
 
+    // console.log(matchingCards);
     if (matchingCards.length > 0) {
       chosenArray = this.selectCardArray({
         selfID: props.selfID,
         deck: [...this.deck],
         topCard: props.topCard,
         requests: JSON.parse(JSON.stringify(this.requests)),
-        playersMoves: [...props.playersMoves],
+        playersMoves: props.playersMoves,
         playersNumber: props.playersNumber,
         matchingCards: matchingCards
       });

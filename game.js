@@ -14,14 +14,12 @@ module.exports = (algorithmNames) => {
     players.push(new Player(deck.take(5), algorithmName));
   });
 
-  console.log("init");
-
   let currentPlayerID, nextPlayerID, prevPlayerID, skipped;
   let topCard = deck.firstCard();
   let playersMoves = [];
 
   for (let i = 0 + algorithmNames.length; i < 1000 + algorithmNames.length; i++) {
-    console.log(i-algorithmNames.length);
+    // console.log(i-algorithmNames.length);
 
     currentPlayerID = i % players.length;
     nextPlayerID = (i + 1) % players.length;
@@ -71,7 +69,7 @@ module.exports = (algorithmNames) => {
 
 
     if (players[currentPlayerID].isWinner())
-      return currentPlayer;
+      return currentPlayerID;
   }
   players.forEach(player => console.log(player.deck));
 

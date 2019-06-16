@@ -1,7 +1,7 @@
 const game = require("./game.js");
 const inputInitPromise = require("./input-init.js");
 
-const gamesNumber = 10;
+const gamesNumber = 10000;
 
 inputInitPromise.then(algorithmNames => {
   let wins = algorithmNames.map(() => 0);
