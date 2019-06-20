@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "jest": "^24.8.0"
+  },
+  "dependencies": {
+    "cli-progress": "^2.1.1"
   }
 }
