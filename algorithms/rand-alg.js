@@ -1,6 +1,6 @@
 //Set first matching card as main
 //Add other matching to main
-//Get rid of jokers, because they screw up algorithm
+//keep jokers until the last card
 
 const Validator = require("./validation");
 

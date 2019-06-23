@@ -7,6 +7,8 @@ const gamesNumber = 10000;
 
 inputInitPromise.then(algorithmNames => {
   let wins = algorithmNames.map(() => 0);
+  let terminated = 0;
+
   const progressBar = new _cliProgress.Bar({}, _cliProgress.Presets.shades_classic);
   progressBar.start(gamesNumber, 0);
 
@@ -19,14 +21,17 @@ inputInitPromise.then(algorithmNames => {
     if (winner >= 0) {
       wins[winner]++;
       //console.log(i+" of "+gamesNumber+": "+algorithmNames[winner]);
-    } //else
-      //console.log("game " + i + " terminated");
+    } else
+      terminated++;
 
   }
 
   progressBar.stop();
 
   console.log();
+
   for (let i = 0; i < algorithmNames.length; i++)
     console.log(algorithmNames[i] + ": " + wins[i] + " wins");
+
+  if(terminated>0)console.log("\nTERMINATED: "+terminated);
 });

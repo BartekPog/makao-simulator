@@ -72,7 +72,7 @@ module.exports = (algorithmNames) => {
     }
 
   }
-  players.forEach(player => console.log(player.deck));
+  //players.forEach(player => console.log(player.deck));
 
   return -1;
 };
