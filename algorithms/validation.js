@@ -184,25 +184,20 @@ function Validator() {
 
   //cardArray, topCard, requests, deck
   this.isArrayMatch = (props) => {
-    if (props.cardArray.length < 1) //return true;
-      console.log("length");
+    if (props.cardArray.length < 1) return true;
 
-    if (this.isInDeck(props) === false) //return false;
-      console.log("inDeck");
+    if (this.isInDeck(props) === false) return false;
 
-    if (this.areRequestsOk(props.cardArray) === false) //return false;
-      console.log("requests");
+    if (this.areRequestsOk(props.cardArray) === false) return false;
 
     const noJokers = this.replaceJokers(props.cardArray);
-    if (this.isArraySelfMatch(noJokers) === false) //return false;
-      console.log("selfMatch");
+    if (this.isArraySelfMatch(noJokers) === false) return false;
 
     if (this.isFirstMatch({
         chosenCard: noJokers[0],
         topCard: props.topCard,
         requests: props.requests
-      }) == false) //return false;
-        console.log("first");
+      }) == false) return false;
 
     return true;
   };

@@ -23,16 +23,19 @@ module.exports = (props) => {
   if(jokerArr.length === props.matchingCards.length)
     return [];
 
-  jokerArr.forEach(joker => joker.cardRequest = {
-    type: props.matchingCards[firstIndex].type,
-    color: 2,
-    cardRequest: {
-      color: -1,
-      type: -1
-    }
-  });
 
-  chosenArray = [props.matchingCards[firstIndex]].concat(...jokerArr, ...chosenArray);
+  if(props.deck.length-chosenArray.length===jokerArr.length){
+    jokerArr.forEach(joker => joker.cardRequest = {
+      type: props.matchingCards[firstIndex].type,
+      color: 2,
+      cardRequest: {
+        color: -1,
+        type: -1
+      }
+    });
+    chosenArray = [props.matchingCards[firstIndex]].concat(...jokerArr, ...chosenArray);
+  }
+  else chosenArray = [props.matchingCards[firstIndex]].concat( ...chosenArray);
 
   const val = new Validator();
 
