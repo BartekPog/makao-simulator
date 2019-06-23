@@ -3,7 +3,7 @@ const inputInitPromise = require("./input-init.js");
 
 const _cliProgress = require("cli-progress");
 
-const gamesNumber = 100000;
+const gamesNumber = 10000;
 
 inputInitPromise.then(algorithmNames => {
   let wins = algorithmNames.map(() => 0);

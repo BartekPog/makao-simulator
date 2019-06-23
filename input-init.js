@@ -10,7 +10,7 @@ module.exports = new Promise((resolve, reject) => {
 
   new Promise((resolve, reject) => {
     fs.readdir(algorithmFolder, (err, files) => {
-      files.forEach((file) => availableAlgorithmNames.push(file.replace(".js", "")));
+      files.filter(file => file.search("-alg.js") >= 0).forEach((file) => availableAlgorithmNames.push(file.replace("-alg.js", "")));
       resolve();
     });
   }).then(() => {
@@ -27,7 +27,7 @@ module.exports = new Promise((resolve, reject) => {
       chosenAlgorithmNames = input.split(" ", 20);
       readline.close();
 
-      let okNames = chosenAlgorithmNames.filter(function (algorithmName) {
+      let okNames = chosenAlgorithmNames.filter(function(algorithmName) {
         return (this.indexOf(algorithmName) >= 0);
       }, availableAlgorithmNames);
 

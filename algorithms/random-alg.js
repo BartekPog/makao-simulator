@@ -2,6 +2,8 @@
 //Add other matching to main
 //Get rid of jokers, because they screw up algorithm
 
+const Validator = require("./validation");
+
 module.exports = (props) => {
   let firstIndex = 0;
 
@@ -31,6 +33,16 @@ module.exports = (props) => {
   });
 
   chosenArray = [props.matchingCards[firstIndex]].concat(...jokerArr, ...chosenArray);
+
+  const val = new Validator();
+
+  if(val.isArrayMatch({
+    cardArray: chosenArray,
+    topCard: props.topCard,
+    requests: props.requests,
+    deck: props.deck
+  })===false) console.log("err");
+
   //
   // console.log();
   // console.log("matchingCards: "); console.log( props.matchingCards[firstIndex]);

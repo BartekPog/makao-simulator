@@ -14,7 +14,7 @@ function Player(startingDeck, algorithmName) {
 
   this.lastCards = [];
 
-  this.selectCardArray = require("./algorithms/" + algorithmName + ".js");
+  this.selectCardArray = require("./algorithms/" + algorithmName + "-alg.js");
 
   this.isWinner = () => {
     return this.deck.length === 0;
@@ -84,7 +84,7 @@ function Player(startingDeck, algorithmName) {
   this.reducePull = (howMany) => this.requests.pull = Math.max(this.requests.pull-howMany, 0);
 
   this.isActiveRequest = () => {
-    if (this.requests.skip * this.requests.pull > 0)
+    if (this.requests.skip + this.requests.pull > 0)
       return true;
     return false;
   };
