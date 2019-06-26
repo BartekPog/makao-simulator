@@ -20,7 +20,7 @@ inputInitPromise.then(algorithmNames => {
 
     if (winner >= 0) {
       wins[winner]++;
-      //console.log(i+" of "+gamesNumber+": "+algorithmNames[winner]);
+      // console.log(i+" of "+gamesNumber+": "+algorithmNames[winner]);
     } else
       terminated++;
 
@@ -34,4 +34,5 @@ inputInitPromise.then(algorithmNames => {
     console.log(algorithmNames[i] + ": " + wins[i] + " wins");
 
   if(terminated>0)console.log("\nTERMINATED: "+terminated);
+  console.log();
 });

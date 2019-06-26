@@ -147,7 +147,7 @@ function Validator() {
   //cardArray, deck
   this.isInDeck = (props) => {
     let removeCount = 0;
-    let testDeck = [...props.deck];
+    let testDeck = JSON.parse(JSON.stringify(props.deck));
     props.cardArray.forEach((card) => {
       for (let i = 0; i < testDeck.length; i++)
         if (
@@ -169,15 +169,15 @@ function Validator() {
   this.isArraySelfMatch = (noJokers) => {
     for (let i = 0; i < noJokers.length - 1; i++)
       if (this.isTypeMatch({
-        chosenCard: noJokers[i],
-        topCard: noJokers[i + 1],
-        requests: {
-          skip: 0,
-          pull: 0,
-          color: -1,
-          type: -1
-        }
-       }) === false)
+          chosenCard: noJokers[i],
+          topCard: noJokers[i + 1],
+          requests: {
+            skip: 0,
+            pull: 0,
+            color: -1,
+            type: -1
+          }
+        }) === false)
         return false;
     return true;
   };
