@@ -7,8 +7,8 @@ Makao (also known as Macau) is one of the most popular card games in Poland. If 
 
 ## How to run simulation?
 Make sure that you have Node.js and NPM installed on your pc. Then just fork/clone this repository and run:
-'''bash
+```bash
 npm i
 node main.js
-'''
+```
 You will be asked to choose available algorithms. Just write their names (in order! - The sitting order has non-neglible impact on final results) and press enter to run simulation. In about 1-3 minutes (depending on your machine's processing power) you should see the outcome on the screen.
