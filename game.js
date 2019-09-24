@@ -28,7 +28,6 @@ module.exports = (algorithmNames) => {
 
     // console.log(players[currentPlayerID].deck.length);
 
-
     let playerMove = players[currentPlayerID].makeMove({
       selfID: currentPlayerID,
       topCard: topCard,

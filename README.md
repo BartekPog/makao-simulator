@@ -33,7 +33,7 @@ Card id | Card type | Action
 
 All the cards with **pull-card** request also make all the pull-card requests on current player add up to the newly created request. It works similarly with **skip-turn** requests. (You can protect yourself against those types of requests by giving another request of the same type and sort of reflecting the request on you)
 
-###### example 1
+### example 1
 player 1: gives 2 of hearts (which gives pull-**2**-cards request to player 2)
 player 2: gives 3 of hearts (which gives collectivly pull-**5**-cards request to player 3; player 2 **does not draw any cards**)
 player 3: draws 5 cards

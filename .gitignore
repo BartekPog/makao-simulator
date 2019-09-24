@@ -1,3 +1,4 @@
 node_modules/
 .jshintrc
 tests.js
+private/
