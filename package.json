@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^24.9.0"
+    "jest": "^26.4.2"
   },
   "dependencies": {
     "cli-progress": "^2.1.1"

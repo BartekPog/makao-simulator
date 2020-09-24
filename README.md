@@ -1,6 +1,8 @@
 # Makao simulator
 The reason this project was made is the overall dullness of makao. It become clear to me, that after a few games almost everyone uses the same strategy. One's actions could be easily written down in a simple step list or algorithm. The only variety in match results is caused by the general randomness of the game rules. That is why I decided to create a platform to compare strategies and find the optimal algorithm for Makao.
 
+![Sample execution screenshot](img/execution-screenshot.png)
+
 
 ## How to run simulation?
 Make sure that you have Node.js and NPM installed on your pc. Then just fork/clone this repository and run:
@@ -12,7 +14,7 @@ You will be asked to choose available algorithms. Just write their names (in ord
 
 
 ## Makao
-Makao (also known as Macau) is one of the most popular card games in Poland. If you want to read more about main game concepts you may wish to check [this link](https://en.wikipedia.org/wiki/Macau_(card_game)). Unfortunately there are many varieties of Makao (which sometimes may lead to an unsuspected dispute on a family meeting). Our version looks pretty much like this:
+*Makao* (also known as *Macau*) is one of the most popular card games in Poland. If you want to read more about main game concepts you may wish to check [this link](https://en.wikipedia.org/wiki/Macau_(card_game)). Unfortunately there are many varieties of Makao (which sometimes may lead to an unsuspected dispute on a family meeting). Our version looks pretty much like this:
 
 Card id | Card type | Action
 ----|---------|-----------------------------------
@@ -33,7 +35,12 @@ Card id | Card type | Action
 
 All the cards with **pull-card** request also make all the pull-card requests on current player add up to the newly created request. It works similarly with **skip-turn** requests. (You can protect yourself against those types of requests by giving another request of the same type and sort of reflecting the request on you)
 
-### example 1
+### example
 player 1: gives 2 of hearts (which gives pull-**2**-cards request to player 2)
 player 2: gives 3 of hearts (which gives collectivly pull-**5**-cards request to player 3; player 2 **does not draw any cards**)
 player 3: draws 5 cards
+
+
+
+## Contribution
+I am a great fan of sandboxes in which programmers can compete against one another in algorithm thinking. The idea of this project stayed in the back of my mind for quite a long time. Currently I have no time to spare for this project but if You have an idea for an improvement, feature or even an algorithm feel free to create **pull request** or describe it in an **issue**! 
